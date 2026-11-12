@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Рівняння та оптимізаційні задачі</title>
+<style>
+:root{--p:#7c3aed;--pk:#ec4899;--or:#f59e0b;--bl:#0ea5e9;--gr:#10b981;--ink:#1e1b3a;--mute:#5b5878;--line:#e4def5;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:linear-gradient(135deg,#fdf4ff,#eff6ff 55%,#fff7ed) fixed}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.25}
+header{background:linear-gradient(120deg,var(--p),var(--pk) 55%,var(--or));color:#fff;padding:1.6rem 1rem 1.2rem;border-radius:0 0 28px 28px;box-shadow:0 10px 30px #7c3aed55}
+.w{max-width:960px;margin:auto}
+header h1{margin:0;font-size:2rem}header p{margin:.2rem 0 .8rem;opacity:.92}
+#who{display:flex;gap:.5rem;flex-wrap:wrap}
+#who input{font:inherit;padding:.45rem .8rem;border:0;border-radius:12px;min-width:0}
+#chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem}
+.chip{background:#ffffff26;border:1px solid #ffffff55;border-radius:999px;padding:.15rem .8rem;font-size:.85rem}
+.chip b{color:#fff}
+nav{display:flex;gap:.5rem;flex-wrap:wrap;margin:1.2rem auto .8rem}
+nav button{flex:1;min-width:120px;padding:.6rem .8rem;border:2px solid var(--c);background:#fff;color:var(--c);font:inherit;font-weight:700;border-radius:14px;cursor:pointer}
+nav button[aria-selected=true]{background:var(--c);color:#fff;box-shadow:0 6px 16px color-mix(in srgb,var(--c) 45%,transparent)}
+main{padding:0 1rem 3rem}
+section{display:none;background:#fff;border-radius:20px;border-top:8px solid var(--c);box-shadow:0 12px 30px #1e1b3a1a;padding:1.4rem}
+section.on{display:block}
+:focus-visible{outline:3px solid var(--or);outline-offset:2px}
+.card{border:2px solid var(--line);border-radius:16px;padding:.8rem 1rem;margin:.7rem 0}
+.k{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:.8rem 0}
+.k div{border-radius:16px;padding:.8rem 1rem;color:#fff;font-weight:600}
+.def{border-left:6px solid var(--pk);background:#fdf2f8;padding:.7rem 1rem;border-radius:0 14px 14px 0;margin:1rem 0}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%}
+th,td{border:1px solid var(--line);padding:.4rem .7rem;text-align:left}th{background:#f3edff}
+details{border:2px solid var(--line);border-radius:14px;padding:.4rem 1rem;margin:.6rem 0}summary{cursor:pointer;font-weight:700}
+code{background:#f3edff;padding:0 .3rem;border-radius:6px}
+.btn{padding:.55rem 1.1rem;border:0;border-radius:12px;background:var(--c,var(--p));color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.btn.o{background:#fff;color:var(--c,var(--p));border:2px solid var(--c,var(--p))}.btn:disabled{opacity:.45}
+.ctl{display:flex;gap:.5rem;flex-wrap:wrap;margin:.7rem 0;align-items:center}
+input[type=number],select{font:inherit;padding:.35rem .6rem;border:2px solid var(--line);border-radius:10px;width:8em}
+input[type=range]{width:100%;accent-color:var(--c,var(--p))}
+.big{font-size:1.6rem;font-weight:800}
+.ok{color:#047857}.bad{color:#b91c1c}
+.fb{padding:.6rem 1rem;border-radius:12px;margin:.6rem 0;font-weight:600}
+.fb.ok{background:#d1fae5}.fb.bad{background:#fee2e2}.fb.i{background:#e0f2fe;color:#075985}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:.8rem 0}
+.bin{min-height:130px;border:3px dashed var(--c);border-radius:16px;padding:.5rem;background:color-mix(in srgb,var(--c) 8%,#fff)}
+.bin h4{margin:0 0 .4rem;color:var(--c)}
+#pool{min-height:60px;border:3px dashed var(--line);border-radius:16px;padding:.5rem;display:flex;flex-wrap:wrap;gap:.4rem}
+.dc{display:inline-block;background:#fff;border:2px solid var(--p);border-radius:12px;padding:.25rem .7rem;margin:.15rem;cursor:grab;user-select:none;font-size:.95rem}
+.dc.sel{background:var(--or);border-color:var(--or);color:#fff}.dc.ok{background:#d1fae5;border-color:#059669}.dc.bad{background:#fee2e2;border-color:#dc2626}
+#ol{list-style:none;padding:0;margin:.6rem 0}
+#ol li{display:flex;gap:.5rem;align-items:center;background:#fff;border:2px solid var(--p);border-radius:12px;padding:.4rem .7rem;margin:.4rem 0;cursor:grab}
+#ol li.ok{background:#d1fae5;border-color:#059669}#ol li.bad{background:#fee2e2;border-color:#dc2626}
+#ol li span{flex:1}#ol button{border:0;background:#f3edff;border-radius:8px;cursor:pointer;font-size:1rem}
+.cell{display:inline-block;min-width:5.5em;text-align:center;border:2px solid var(--p);border-radius:8px;padding:.1rem .5rem;background:#faf5ff;font-weight:700}
+.bar{height:14px;background:var(--line);border-radius:8px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--bl),var(--gr))}
+pre{background:#1e1b3a;color:#e9d5ff;border-radius:12px;padding:.6rem 1rem;overflow:auto;max-height:11em;font-size:.9rem}
+.q{margin:.9rem 0;padding-bottom:.7rem;border-bottom:1px dashed var(--line)}
+.q label{display:block;padding:.3rem .6rem;border-radius:10px;cursor:pointer}.q label:hover{background:#f3edff}
+.q.ok label.r{background:#d1fae5}.q.bad label.r{background:#d1fae5}.q.bad label.w2{background:#fee2e2}
+</style>
+</head>
+<body>
+<header><div class="w">
+<h1>🚀 Рівняння та оптимізаційні задачі</h1>
+<p>Excel: Підбір параметра і Розв’язувач · симуляції, перетягування, тест і PDF-звіт</p>
+<div id="who"></div><div id="chips"></div></div></header>
+<div class="w"><nav id="nav"></nav>
+<main>
+
+<section id="th" style="--c:#7c3aed">
+<h2>1. Розв’язування рівнянь: Підбір параметра</h2>
+<p>Математичні моделі процесів описують рівняннями. В Excel рівняння з <b>одним невідомим</b> розв’язує засіб <b>«Підбір параметра»</b>: він змінює значення невідомого, доки формула не дасть потрібний результат.</p>
+<div class="def"><b>Купець і сукно.</b> 138 аршин чорного й червоного сукна коштують 540 крб (чорне — 3 крб, червоне — 5 крб за аршин). Нехай чорного <i>x</i>, тоді червоного 138 − <i>x</i>: <code>3x + 5(138 − x) = 540</code>.</div>
+<details open><summary>Як підготувати таблицю</summary><ul>
+<li>Невідоме <i>x</i> — окрема клітинка; початково вписують будь-яке число, <b>але не нуль</b> (можливе ділення на 0).</li>
+<li>В іншій клітинці — формула лівої частини рівняння, що посилається на клітинку з <i>x</i>.</li>
+<li>У правій частині має бути константа — значення з умови (540).</li>
+<li>ДАНІ → Аналіз «що-якщо» → Підбір параметра: вказують клітинку з формулою, її бажане значення й клітинку, що змінюється.</li></ul></details>
+<details><summary>Кредит 1000 у. о. під 20 % на 5 років</summary>
+<p>Борг наприкінці року: <code>Борг = Залишок + Залишок·Річні/100</code>. Наприкінці 2-го року повертають 200, кожного наступного — по 400. Потрібно знайти внесок <i>x</i> першого року, щоб борг5 = 0. Це модель із ланцюжком формул, де кожен борг залежить від попереднього, а початок ланцюжка — від <i>x</i>. Поекспериментуйте у вкладці «Підбір параметра».</p></details>
+
+<h2>2. Оптимізаційні задачі</h2>
+<div class="def"><b>Оптимізаційна задача</b> — задача, де серед багатьох варіантів потрібно знайти найкращий за певним критерієм (найбільше або найменше значення показника) з урахуванням обмежень.</div>
+<div class="k"><div style="background:var(--p)">🎯 Найкращий варіант → максимум чи мінімум (прибуток, час, витрати)</div><div style="background:var(--pk)">📈 Критерій оптимальності → те, що оптимізуємо: <b>цільова функція</b></div><div style="background:var(--bl)">🚧 Обмеження → умови, які не можна порушувати (бюджет, ресурси, час)</div></div>
+<p><b>Оптимізаційні параметри (змінні)</b> — величини, від яких залежить цільова функція. Підбір параметра працює з одним невідомим, а <b>Розв’язувач</b> дозволяє: вказати кілька змінних клітинок, задати обмеження, обрати максимум, мінімум або конкретне значення цільової функції.</p>
+<div class="def"><b>Приклад.</b> Виробляють вироби А, B, C з доходом 13, 18, 22 у. о. за одиницю. <br>Цільова функція: <code>дохід = 13a + 18b + 22c → max</code>.<br>Обмеження: <code>a + b + c = 300; a ≥ 50; b ≥ 40; c ≤ 40</code>; a, b, c — цілі додатні.</div>
+<details><summary>Правила моделі в Excel і підключення Розв’язувача</summary><ul>
+<li>є діапазон клітинок для оптимізаційних параметрів, клітинка з формулою цільової функції (з посиланнями на змінні);</li>
+<li>увімкнення: ФАЙЛ → Параметри → Надбудови → Перейти → позначити «Розв’язувач» → ОК; команда з’явиться на стрічці ДАНІ;</li>
+<li>у вікні параметрів: цільова клітинка і напрямок (max/min/значення), змінні клітинки, обмеження кнопкою «Додати», потім «Розв’язати» і «Зберегти знайдений розв’язок».</li></ul></details>
+<div class="ctl"><button class="btn" data-go="a1">Далі: симуляція «Підбір параметра» →</button></div>
+</section>
+
+<section id="a1" style="--c:#0ea5e9"></section>
+<section id="a2" style="--c:#ec4899"></section>
+<section id="a3" style="--c:#10b981"></section>
+<section id="ts" style="--c:#f59e0b"></section>
+<section id="rp" style="--c:#7c3aed"></section>
+</main></div>
+
+<script>
+const $=s=>document.querySelector(s), esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let S={name:"",cls:"",log:[]};
+try{Object.assign(S,JSON.parse(localStorage.getItem("bd_opt")||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem("bd_opt",JSON.stringify(S))}catch(e){}};
+const ACTS=["Підбір параметра","Класифікація (перетягування)","Послідовність дій","Розв’язувач","Тест"];
+const TABS=[["th","📘 Теорія","#7c3aed"],["a1","🎛 Підбір параметра","#0ea5e9"],["a2","🧩 Модель","#ec4899"],["a3","🏭 Розв’язувач","#10b981"],["ts","📝 Тест","#f59e0b"],["rp","📄 Звіт PDF","#7c3aed"]];
+$("#nav").innerHTML=TABS.map((t,i)=>`<button role="tab" data-t="${t[0]}" style="--c:${t[2]}" aria-selected="${i===0}">${t[1]}</button>`).join("");
+function show(id){document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===id));document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===id));if(id==="rp")renderReport();scrollTo(0,0)}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>show(b.dataset.t));
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)show(g.dataset.go)});
+$("#th").classList.add("on");
+
+// ---- журнал спроб ----
+const att=a=>S.log.filter(l=>l.act===a).length;
+const best=a=>S.log.filter(l=>l.act===a).reduce((m,l)=>Math.max(m,l.score/l.max),0);
+function addLog(act,score,max,note){S.log.push({t:new Date().toISOString(),act,n:att(act)+1,score,max,note});save();chips()}
+function chips(){$("#chips").innerHTML=ACTS.map(a=>`<span class="chip">${a}: <b>${att(a)?Math.round(best(a)*100)+"%":"—"}</b>${att(a)?` · спроб ${att(a)}`:""}</span>`).join("")}
+function who(){$("#who").innerHTML=`<input id="nm" placeholder="Прізвище та ім’я" value="${esc(S.name)}" aria-label="Прізвище та ім’я"><input id="cl" size="6" placeholder="Клас" value="${esc(S.cls)}" aria-label="Клас">`;
+ $("#nm").oninput=e=>{S.name=e.target.value;save()};$("#cl").oninput=e=>{S.cls=e.target.value;save()}}
+const fb=(el,ok,t)=>el.innerHTML=`<div class="fb ${ok===null?"i":ok?"ok":"bad"}">${t}</div>`;
+
+// ================= A1: Підбір параметра (симуляція) =================
+function debts(x){const p=[x,200,400,400,400];let d=1000,r=[];for(let i=0;i<5;i++){d=(d-p[i])*1.2;r.push([p[i],d])}return r}
+const P=[
+ {n:"Купець і сукно",f:x=>3*x+5*(138-x),t:540,min:1,max:137,st:1,fm:"=3*C2+5*(138−C2)"},
+ {n:"Кредит",f:x=>debts(x)[4][1],t:0,min:0,max:1000,st:.01,fm:"=борг5(x)"}];
+function seek(p){let a=p.min,b=p.max,ga=p.f(a)-p.t,s=[];for(let i=0;i<40;i++){const m=(a+b)/2,gm=p.f(m)-p.t;s.push(m);if(Math.abs(gm)<1e-4)break;if((ga<0)===(gm<0)){a=m;ga=gm}else b=m}return s}
+P[0].ans=seek(P[0]).pop();P[1].ans=seek(P[1]).pop();
+let pi=0,px=P[0].min+30,busy=false;
+function rowsA1(){return pi?debts(px).map((r,i)=>`<tr><td>Рік ${i+1}</td><td>${(i?[200,400,400,400][i-1]:px).toFixed(2)}</td><td>${r[1].toFixed(2)}</td></tr>`).join(""):`<tr><td>Чорне, аршин (x)</td><td>${px}</td></tr><tr><td>Червоне, аршин</td><td>${138-px}</td></tr>`}
+function upd1(){const p=P[pi],v=p.f(px),pct=Math.max(0,1-Math.abs(v-p.t)/(Math.abs(p.f(p.min)-p.t)||1));
+ $("#xv").textContent=pi?px.toFixed(2):px;$("#tb").innerHTML=rowsA1();$("#fv").textContent=v.toFixed(pi?3:1);
+ $("#dv").textContent=(v-p.t).toFixed(3);$("#dv").className=Math.abs(v-p.t)<.01?"ok":"bad";$("#br").style.width=pct*100+"%"}
+function renderA1(){
+ const p=P[pi];
+ $("#a1").innerHTML=`<h2>🎛 Симуляція «Підбір параметра»</h2>
+ <div class="ctl"><button class="btn ${pi?"o":""}" data-p="0">Купець і сукно</button><button class="btn ${pi?"":"o"}" data-p="1">Кредит</button></div>
+ <p>${pi?"Знайдіть внесок x у перший рік, щоб борг наприкінці 5-го року дорівнював 0.":"Знайдіть x, щоб вартість сукна дорівнювала 540."} Рухайте повзунок вручну або запустіть автопідбір.</p>
+ <label>x = <span class="cell" id="xv"></span><input type="range" id="sl" min="${p.min}" max="${p.max}" step="${p.st}" value="${px}" ${busy?"disabled":""} aria-label="Значення x"></label>
+ <div class="tw"><table><tr><th>Клітинка</th><th>Значення</th>${pi?"<th>Борг</th>":""}</tr><tbody id="tb"></tbody></table></div>
+ <p>Формула <code>${p.fm}</code> = <span class="cell big" id="fv"></span> Ціль: <span class="cell">${p.t}</span> Різниця: <b id="dv"></b></p>
+ <div class="bar" aria-label="Наближення до цілі"><i id="br"></i></div>
+ <div class="ctl"><button class="btn" id="gs" ${busy?"disabled":""}>▶ Підбір параметра (автоматично)</button><button class="btn o" id="rs">Скинути</button></div>
+ <pre id="lg" aria-live="polite">Журнал підбору з’явиться тут…</pre>
+ <h3>Ваша відповідь</h3>
+ <div class="ctl">${pi?`x = <input type="number" id="an" step="0.01">`:`Чорного: <input type="number" id="an"> Червоного: <input type="number" id="an2">`}<button class="btn" id="ck">Перевірити</button></div><div id="fa"></div>`;
+ upd1();
+ document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{pi=+b.dataset.p;px=P[pi].min+(pi?100:30);renderA1()});
+ $("#sl").oninput=e=>{px=+e.target.value;upd1()};
+ $("#rs").onclick=()=>{px=P[pi].min+(pi?100:30);renderA1()};
+ $("#gs").onclick=async()=>{busy=true;$("#gs").disabled=true;$("#sl").disabled=true;const st=seek(p);let t="";
+  for(let i=0;i<st.length;i++){await new Promise(r=>setTimeout(r,140));const vv=p.f(st[i]);t+=`Крок ${i+1}: x = ${st[i].toFixed(4)}, формула = ${vv.toFixed(4)}\n`;$("#xv").textContent=st[i].toFixed(pi?2:1);$("#fv").textContent=vv.toFixed(3);$("#lg").textContent=t;$("#lg").scrollTop=1e5}
+  busy=false;px=pi?+p.ans.toFixed(2):Math.round(p.ans);const keep=t+"Розв’язок знайдено ✔\n";renderA1();$("#lg").textContent=keep};
+ $("#ck").onclick=()=>{const a=+$("#an").value;let sc,mx,note;
+  if(pi){mx=1;sc=Math.abs(a-P[1].ans)<=.05?1:0;note=`Кредит: x=${a||"—"}`}
+  else{const b=+$("#an2").value;sc=(a===75)+(b===63);mx=2;note=`Сукно: чорного ${a||"—"}, червоного ${b||"—"}`}
+  addLog("Підбір параметра",sc,mx,note);fb($("#fa"),sc===mx,sc===mx?"Правильно! 🎉":`Балів: ${sc} з ${mx}. Скористайтеся автопідбором і порівняйте.`)};
+}
+
+// ================= A2: перетягування =================
+const ITEMS=[["дохід = 13a + 18b + 22c",0],["знайти максимум доходу",0],["a, b, c — кількість виробів A, B, C",1],["a + b + c = 300",2],["a ≥ 50",2],["b ≥ 40",2],["c ≤ 40",2],["13, 18, 22 у. о. — дохід з одиниці",3]];
+const BINS=[["🎯 Цільова функція","#7c3aed"],["🔧 Змінні (параметри)","#0ea5e9"],["🚧 Обмеження","#ec4899"],["📦 Відомі дані","#10b981"]];
+const STEPS=["Скласти математичну модель: цільова функція, змінні, обмеження","Створити таблицю в Excel зі змінними та формулою цільової функції","Увімкнути надбудову й запустити Розв’язувач (ДАНІ)","Вказати цільову клітинку та напрямок: max, min чи значення","Вказати змінні клітинки й додати обмеження","Натиснути «Розв’язати» та проаналізувати розв’язок"];
+const shuf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+let place={},sel=null,ord=[];
+function newA2(){place={};sel=null;ord=shuf(STEPS.map((_,i)=>i));if(ord.every((v,i)=>v===i))ord.reverse();renderA2()}
+function card(i){return `<span class="dc" draggable="true" tabindex="0" data-i="${i}" role="button">${esc(ITEMS[i][0])}</span>`}
+function renderA2(){
+ $("#a2").innerHTML=`<h2>🧩 Побудуйте модель задачі</h2><p>Задача про вироби A, B, C. Перетягніть картки в потрібні блоки (на телефоні: торкніться картки, потім блока).</p>
+ <div id="pool">${ITEMS.map((_,i)=>place[i]===undefined?card(i):"").join("")}</div>
+ <div class="bins">${BINS.map((b,k)=>`<div class="bin" data-b="${k}" style="--c:${b[1]}"><h4>${b[0]}</h4>${ITEMS.map((_,i)=>place[i]===k?card(i):"").join("")}</div>`).join("")}</div>
+ <div class="ctl"><button class="btn" id="c1">Перевірити</button><button class="btn o" id="n1">Нова спроба</button></div><div id="f1"></div>
+ <h2>🔢 Розставте етапи розв’язання в порядку</h2><p>Перетягніть рядки або користуйтеся стрілками.</p>
+ <ol id="ol">${ord.map((s,p)=>`<li draggable="true" data-p="${p}"><b>${p+1}.</b><span>${esc(STEPS[s])}</span><button data-m="-1" aria-label="Вгору">↑</button><button data-m="1" aria-label="Вниз">↓</button></li>`).join("")}</ol>
+ <div class="ctl"><button class="btn" id="c2">Перевірити порядок</button><button class="btn o" id="n2">Перемішати</button></div><div id="f2"></div>`;
+ const put=(i,k)=>{if(k===null)delete place[i];else place[i]=k;sel=null;renderA2()};
+ document.querySelectorAll(".dc").forEach(c=>{c.ondragstart=e=>e.dataTransfer.setData("text",c.dataset.i);
+  const act=()=>{const i=+c.dataset.i;if(sel!==null&&place[i]!==undefined&&sel!==i){put(sel,place[i]);return}if(place[i]!==undefined&&sel===null)put(i,null);else{sel=sel===i?null:i;document.querySelectorAll(".dc").forEach(x=>x.classList.toggle("sel",+x.dataset.i===sel))}};
+  c.onclick=act;c.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act()}}});
+ document.querySelectorAll(".bin").forEach(b=>{b.ondragover=e=>e.preventDefault();b.ondrop=e=>{e.preventDefault();put(+e.dataTransfer.getData("text"),+b.dataset.b)};b.onclick=e=>{if(sel!==null&&!e.target.closest(".dc"))put(sel,+b.dataset.b)}});
+ $("#pool").ondragover=e=>e.preventDefault();$("#pool").ondrop=e=>{e.preventDefault();put(+e.dataTransfer.getData("text"),null)};
+ $("#pool").onclick=e=>{if(sel!==null&&!e.target.closest(".dc"))put(sel,null)};
+ $("#n1").onclick=()=>{place={};sel=null;renderA2()};
+ $("#c1").onclick=()=>{let ok=0;document.querySelectorAll(".bin .dc").forEach(c=>{const i=+c.dataset.i,g=place[i]===ITEMS[i][1];c.classList.add(g?"ok":"bad");ok+=g});
+  addLog("Класифікація (перетягування)",ok,ITEMS.length,`Правильно розміщено ${ok} з ${ITEMS.length}`);fb($("#f1"),ok===ITEMS.length,`Правильно: ${ok} з ${ITEMS.length}.${ok<ITEMS.length?" Червоні картки — не на своєму місці: натисніть на них, щоб повернути.":" Модель складено! 🎉"}`)};
+ const mv=(p,q)=>{if(q<0||q>=ord.length)return;const [x]=ord.splice(p,1);ord.splice(q,0,x);renderA2()};
+ let dp=null;document.querySelectorAll("#ol li").forEach(li=>{const p=+li.dataset.p;li.ondragstart=e=>{dp=p;e.dataTransfer.setData("text","s")};li.ondragover=e=>e.preventDefault();li.ondrop=e=>{e.preventDefault();if(dp!==null)mv(dp,p)};
+  li.querySelectorAll("button").forEach(b=>b.onclick=()=>mv(p,p+ +b.dataset.m))});
+ $("#n2").onclick=()=>{ord=shuf(ord);renderA2()};
+ $("#c2").onclick=()=>{let ok=0;document.querySelectorAll("#ol li").forEach((li,p)=>{const g=ord[p]===p;li.classList.add(g?"ok":"bad");ok+=g});
+  addLog("Послідовність дій",ok,STEPS.length,`На своїх місцях ${ok} з ${STEPS.length}`);fb($("#f2"),ok===STEPS.length,`На своїх місцях: ${ok} з ${STEPS.length}.`)};
+}
+
+// ================= A3: Розв’язувач (симуляція) =================
+const OPT=5310;let v3={a:100,b:100,c:100},bestF=0,run=false;
+const cons=v=>[["a + b + c = 300",v.a+v.b+v.c===300],["a ≥ 50",v.a>=50],["b ≥ 40",v.b>=40],["c ≤ 40",v.c<=40]];
+let viaS=false;
+function upd3(){const inc=13*v3.a+18*v3.b+22*v3.c,cs=cons(v3);if(cs.every(c=>c[1])&&inc>bestF&&!viaS)bestF=inc;
+ $("#inc").textContent=inc;$("#cl3").innerHTML=cs.map(c=>`<li class="${c[1]?"ok":"bad"}">${c[1]?"✅":"❌"} ${c[0]}</li>`).join("");$("#bf").textContent=bestF||"—";$("#bb").style.width=Math.min(100,bestF/OPT*100)+"%"}
+function renderA3(){
+ $("#a3").innerHTML=`<h2>🏭 Симуляція «Розв’язувач»</h2>
+ <p>Підберіть кількість виробів, щоб дохід був <b>максимальним</b> і всі обмеження виконувались. Потім запустіть «Розв’язувач» і порівняйте. Результат, отриманий Розв’язувачем, у залік не йде.</p>
+ ${["a","b","c"].map((k,i)=>`<label>Виріб ${k.toUpperCase()} (${[13,18,22][i]} у. о.): <span class="cell" id="v_${k}">${v3[k]}</span><input type="range" min="0" max="300" value="${v3[k]}" data-k="${k}" ${run?"disabled":""}></label>`).join("")}
+ <div class="card"><div>Дохід (цільова клітинка D5): <span class="cell big" id="inc"></span></div><ul id="cl3"></ul>
+ <p>Найкращий допустимий дохід, знайдений вами: <b id="bf"></b></p><div class="bar"><i id="bb"></i></div></div>
+ <div class="ctl"><button class="btn" id="sv">▶ Розв’язати (Розв’язувач)</button><button class="btn o" id="sv0">Скинути</button><button class="btn" id="fx" style="--c:#f59e0b">💾 Зафіксувати результат</button></div><div id="f3"></div>`;
+ upd3();
+ document.querySelectorAll("#a3 input[type=range]").forEach(r=>r.oninput=()=>{viaS=false;v3[r.dataset.k]=+r.value;$("#v_"+r.dataset.k).textContent=r.value;upd3()});
+ $("#sv0").onclick=()=>{v3={a:100,b:100,c:100};bestF=0;viaS=false;renderA3()};
+ $("#sv").onclick=async()=>{run=true;viaS=true;$("#sv").disabled=true;document.querySelectorAll("#a3 input[type=range]").forEach(r=>r.disabled=true);const f={...v3},t={a:50,b:210,c:40};
+  for(let i=1;i<=20;i++){await new Promise(r=>setTimeout(r,90));for(const k in t){v3[k]=Math.round(f[k]+(t[k]-f[k])*i/20);$("#v_"+k).textContent=v3[k];document.querySelector(`#a3 [data-k=${k}]`).value=v3[k]}upd3()}
+  run=false;document.querySelectorAll("#a3 input[type=range]").forEach(r=>r.disabled=false);$("#sv").disabled=false;
+  fb($("#f3"),null,`Розв’язувач знайшов оптимум: a = 50, b = 210, c = 40, дохід ${OPT} у. о. Змінні «притиснуті» до обмежень a ≥ 50 і c ≤ 40, а решту віддано найвигіднішому з доступних виробів — B.`)};
+ $("#fx").onclick=()=>{addLog("Розв’язувач",bestF,OPT,`Найкращий допустимий дохід ${bestF||0} з ${OPT}`);fb($("#f3"),bestF===OPT,bestF===OPT?"Оптимум знайдено! 🎉":`Зафіксовано: ${bestF||0} з ${OPT}. Спробуйте ще: який виріб найвигідніший і скільки його можна виробити?`)};
+}
+
+// ================= Тест =================
+const Q=[
+["Для яких рівнянь підходить засіб «Підбір параметра»?",["З одним невідомим","Лише для систем з багатьма невідомими","Тільки для текстових даних","Для побудови діаграм"],0],
+["Що не варто вставляти в клітинку невідомого на початку?",["Нуль","Число 1","Число 100","Дробове число"],0],
+["Скільки аршин чорного сукна купив купець (3x + 5(138 − x) = 540)?",["63","75","138","45"],1],
+["Що таке оптимізаційна задача?",["Пошук найкращого варіанта за критерієм з урахуванням обмежень","Перевірка орфографії","Створення діаграми","Сортування списку"],0],
+["Що в оптимізаційній задачі називають цільовою функцією?",["Умови, які не можна порушувати","Величину, яку потрібно зробити найбільшою чи найменшою","Назву аркуша","Кількість стовпців"],1],
+["Що таке обмеження?",["Умови, які не можна порушувати (бюджет, ресурси, час)","Формат клітинки","Колір шрифту","Назва змінної"],0],
+["Який засіб використовують для задач з кількома змінними й обмеженнями?",["Автозаповнення","Розв’язувач","Орфографія","Умовне форматування"],1],
+["Де з’являється команда «Розв’язувач» після підключення надбудови?",["На стрічці ВСТАВКА","На стрічці ДАНІ","На стрічці ВИГЛЯД","На стрічці ГОЛОВНА"],1],
+["Що вказують у полі «Змінні клітинки»?",["Клітинки з оптимізаційними параметрами","Клітинку з назвою файлу","Лише клітинки з текстом","Діапазон критеріїв фільтра"],0],
+["Яка з умов у задачі про вироби є обмеженням?",["дохід = 13a + 18b + 22c","c ≤ 40","знайти максимум","13, 18, 22 — ціни"],1]
+];
+function renderTest(){
+ $("#ts").innerHTML=`<h2>📝 Тест</h2><p>${Q.length} питань. Спроб можна робити скільки завгодно: кожна фіксується у звіті.</p>`+Q.map((q,i)=>`<div class="q" id="q${i}"><b>${i+1}. ${esc(q[0])}</b>${q[1].map((o,j)=>`<label class="${j===q[2]?"r":"w2"}"><input type="radio" name="q${i}" value="${j}"> ${esc(o)}</label>`).join("")}</div>`).join("")+`<div class="ctl"><button class="btn" id="tc">Перевірити</button><button class="btn o" id="tr">Нова спроба</button></div><div id="ft"></div>`;
+ $("#tr").onclick=renderTest;
+ $("#tc").onclick=()=>{let ok=0;Q.forEach((q,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`),g=c&&+c.value===q[2];ok+=!!g;$("#q"+i).className="q "+(g?"ok":"bad");document.querySelectorAll(`input[name=q${i}]`).forEach(x=>x.disabled=true)});
+  $("#tc").disabled=true;addLog("Тест",ok,Q.length,`Правильних відповідей ${ok} з ${Q.length}`);fb($("#ft"),ok>=8,`Результат: ${ok} з ${Q.length}. Зелене — правильна відповідь.`)};
+}
+
+// ================= Звіт і PDF =================
+const fmt=t=>new Date(t).toLocaleString("uk-UA",{dateStyle:"short",timeStyle:"short"});
+function renderReport(){
+ const sum=ACTS.map(a=>`<tr><td>${a}</td><td>${att(a)}</td><td>${att(a)?Math.round(best(a)*100)+"%":"—"}</td></tr>`).join("");
+ const lg=S.log.map(l=>`<tr><td>${fmt(l.t)}</td><td>${esc(l.act)} №${l.n}</td><td>${l.score}/${l.max}</td><td>${esc(l.note)}</td></tr>`).join("")||`<tr><td colspan=4>Спроб ще немає — виконайте завдання.</td></tr>`;
+ $("#rp").innerHTML=`<h2>📄 Звіт про спроби та результати</h2><p>Учень: <b>${esc(S.name||"не вказано")}</b>, клас: <b>${esc(S.cls||"—")}</b></p>
+ <h3>Підсумок</h3><div class="tw"><table><tr><th>Завдання</th><th>Спроб</th><th>Найкращий результат</th></tr>${sum}</table></div>
+ <h3>Журнал спроб</h3><div class="tw"><table><tr><th>Час</th><th>Завдання</th><th>Бали</th><th>Деталі</th></tr>${lg}</table></div>
+ <div class="ctl"><button class="btn" id="pdf">⬇ Завантажити PDF</button><button class="btn o" id="clr">Очистити журнал</button></div><div id="fr"></div>`;
+ $("#pdf").onclick=()=>{if(!S.name.trim()){fb($("#fr"),false,"Спочатку введіть прізвище та ім’я у верхній частині сторінки.");return}
+  const blob=makePDF(pages()),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`Звіт_${S.name.trim().replace(/\s+/g,"_")}.pdf`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);fb($("#fr"),true,"PDF сформовано й завантажується на ваш комп’ютер.")};
+ $("#clr").onclick=()=>{if(confirm("Видалити всі збережені спроби?")){S.log=[];save();chips();renderReport()}};
+}
+function pages(){
+ const W=1190,H=1684,out=[];let i=0,pg=0;
+ const fit=(g,t,w)=>{t=String(t);if(g.measureText(t).width<=w)return t;while(t.length&&g.measureText(t+"…").width>w)t=t.slice(0,-1);return t+"…"};
+ do{
+  const c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,W,H);let y=70;
+  const F=(s,w="normal")=>g.font=`${w} ${s}px Arial,Helvetica,sans-serif`;
+  if(pg===0){const gr=g.createLinearGradient(0,0,W,0);gr.addColorStop(0,"#7c3aed");gr.addColorStop(.55,"#ec4899");gr.addColorStop(1,"#f59e0b");g.fillStyle=gr;g.fillRect(0,0,W,230);
+   g.fillStyle="#fff";F(54,"bold");g.fillText("Звіт: рівняння та оптимізаційні задачі",60,110);F(28);g.fillText("Спроби та проміжні результати учня",60,160);
+   g.fillStyle="#1e1b3a";F(32,"bold");g.fillText("Учень: "+S.name,60,300);F(30);g.fillText("Клас: "+(S.cls||"—"),60,345);g.fillText("Сформовано: "+fmt(new Date().toISOString()),60,390);
+   F(34,"bold");g.fillText("Підсумок",60,470);y=500;
+   g.fillStyle="#f3edff";g.fillRect(60,y,1070,50);g.fillStyle="#1e1b3a";F(24,"bold");g.fillText("Завдання",75,y+34);g.fillText("Спроб",560,y+34);g.fillText("Найкращий результат",700,y+34);y+=50;
+   ACTS.forEach(a=>{const p=best(a);F(24);g.fillStyle="#1e1b3a";g.fillText(a,75,y+36);g.fillText(String(att(a)),580,y+36);g.fillStyle="#e4def5";g.fillRect(700,y+18,300,16);g.fillStyle=p>=.8?"#10b981":p>=.5?"#f59e0b":"#ec4899";g.fillRect(700,y+18,300*p,16);g.fillStyle="#1e1b3a";g.fillText(att(a)?Math.round(p*100)+"%":"—",1015,y+36);g.strokeStyle="#e4def5";g.strokeRect(60,y,1070,56);y+=56});
+   y+=50;F(34,"bold");g.fillText("Журнал спроб",60,y);y+=30}
+  else{g.fillStyle="#7c3aed";F(26,"bold");g.fillText("Журнал спроб (продовження) — "+S.name,60,y);y+=40}
+  const hd=()=>{g.fillStyle="#f3edff";g.fillRect(60,y,1070,46);g.fillStyle="#1e1b3a";F(22,"bold");g.fillText("Час",72,y+31);g.fillText("Завдання",250,y+31);g.fillText("Бали",560,y+31);g.fillText("Деталі",680,y+31);y+=46};
+  hd();
+  if(!S.log.length){F(24);g.fillStyle="#5b5878";g.fillText("Спроб ще немає.",72,y+40)}
+  while(i<S.log.length&&y<H-120){const l=S.log[i];F(21);g.fillStyle="#1e1b3a";g.fillText(fmt(l.t),72,y+34);g.fillText(fit(g,`${l.act} №${l.n}`,290),250,y+34);g.fillText(`${l.score}/${l.max}`,560,y+34);g.fillText(fit(g,l.note,440),680,y+34);g.strokeStyle="#e4def5";g.strokeRect(60,y,1070,50);y+=50;i++}
+  g.fillStyle="#5b5878";F(20);g.fillText(`Сторінка ${pg+1}`,W-190,H-40);out.push(c);pg++;
+ }while(i<S.log.length);
+ return out}
+function makePDF(cv){
+ const enc=new TextEncoder(),parts=[],offs=[];let len=0;
+ const push=b=>{if(typeof b==="string")b=enc.encode(b);parts.push(b);len+=b.length};
+ const obj=(n,fn)=>{offs[n]=len;push(`${n} 0 obj\n`);fn();push("\nendobj\n")};
+ push("%PDF-1.4\n");obj(1,()=>push("<< /Type /Catalog /Pages 2 0 R >>"));
+ obj(2,()=>push(`<< /Type /Pages /Kids [${cv.map((_,k)=>`${3+k*3} 0 R`).join(" ")}] /Count ${cv.length} >>`));
+ cv.forEach((c,k)=>{const p=3+k*3,jpg=Uint8Array.from(atob(c.toDataURL("image/jpeg",.92).split(",")[1]),ch=>ch.charCodeAt(0)),cs=`q 595 0 0 842 0 0 cm /Im${k} Do Q`;
+  obj(p,()=>push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /Im${k} ${p+2} 0 R >> >> /Contents ${p+1} 0 R >>`));
+  obj(p+1,()=>push(`<< /Length ${cs.length} >>\nstream\n${cs}\nendstream`));
+  obj(p+2,()=>{push(`<< /Type /XObject /Subtype /Image /Width ${c.width} /Height ${c.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpg.length} >>\nstream\n`);push(jpg);push("\nendstream")})});
+ const xr=len,tot=3+cv.length*3;push(`xref\n0 ${tot}\n0000000000 65535 f \n`);
+ for(let n=1;n<tot;n++)push(String(offs[n]).padStart(10,"0")+" 00000 n \n");
+ push(`trailer\n<< /Size ${tot} /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`);
+ return new Blob(parts,{type:"application/pdf"})}
+
+who();chips();renderA1();newA2();renderA3();renderTest();
+</script>
+</body>
+</html>
